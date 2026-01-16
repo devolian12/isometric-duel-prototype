@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Isometric Tactics</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div id="app">
+        <!-- TOP HUD -->
+        <header id="hud" class="panel">
+            <div id="turn-info">
+                <span id="turn-text">Turn 1 • P1</span>
+            </div>
+
+            <!-- Character Selectors -->
+            <div id="char-selects">
+                <select id="p1-char-select" aria-label="P1 Character">
+                    <option value="DUELIST">P1: Duelist</option>
+                    <option value="RANGED">P1: Ranged</option>
+                </select>
+                <select id="p2-char-select" aria-label="P2 Character">
+                    <option value="DUELIST">P2: Duelist</option>
+                    <option value="RANGED" selected>P2: Ranged</option>
+                </select>
+            </div>
+
+            <div id="hp-bar">
+                <div id="p1-status" class="hp-box p1">P1 10</div>
+                <div id="p2-status" class="hp-box p2">P2 10</div>
+            </div>
+        </header>
+
+        <!-- MAIN BOARD AREA -->
+        <div id="board-container">
+            <canvas id="game-canvas"></canvas>
+
+            <!-- Floating Log Button (Mobile) -->
+            <button id="log-toggle" aria-label="Toggle Log">Log ▾</button>
+
+            <!-- Collapsible Log Panel -->
+            <div id="log-panel" class="hidden">
+                <div id="log"></div>
+            </div>
+        </div>
+
+        <!-- BOTTOM CONTROLS -->
+        <footer id="controls" class="panel">
+            <div id="spells-list">
+                <!-- Spells injected here -->
+            </div>
+            <button id="btn-end-turn" class="action-btn">End Turn</button>
+        </footer>
+    </div>
+
+    <script type="module" src="main.js"></script>
+</body>
+
+</html>

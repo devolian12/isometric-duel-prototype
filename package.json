@@ -1,0 +1,12 @@
+{
+    "name": "tactical-game-rules-engine",
+    "version": "1.0.0",
+    "description": "Phase 1: Deterministic headless rules engine",
+    "main": "rules/engine.js",
+    "type": "module",
+    "scripts": {
+        "test": "node tests/run_rules_tests.js"
+    },
+    "author": "",
+    "license": "ISC"
+}

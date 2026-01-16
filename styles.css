@@ -1,0 +1,321 @@
+:root {
+  --bg-color: #121212;
+  --panel-bg: #1e1e1e;
+  --text-color: #e0e0e0;
+  --accent: #3b82f6;
+  --accent-hover: #2563eb;
+  --danger: #ef4444;
+  --success: #22c55e;
+  --warning: #eab308;
+  --border: #333;
+  --font-ui: system-ui, -apple-system, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg-color);
+  color: var(--text-color);
+  font-family: var(--font-ui);
+  height: 100vh;
+  overflow: hidden;
+  /* Prevent scroll */
+}
+
+/* --- Layout Container --- */
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* --- HUD (Top) --- */
+#hud {
+  background: var(--panel-bg);
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  gap: 8px;
+  /* Spacing for selectors */
+}
+
+#turn-text {
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: #fff;
+  white-space: nowrap;
+}
+
+#char-selects {
+  display: flex;
+  gap: 8px;
+}
+
+select {
+  background: #333;
+  color: #eee;
+  border: 1px solid #444;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 0.8rem;
+  font-family: inherit;
+  outline: none;
+}
+
+#hp-bar {
+  display: flex;
+  gap: 12px;
+}
+
+.hp-box {
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.hp-box.p1 {
+  background: rgba(59, 130, 246, 0.2);
+  color: #60a5fa;
+  border: 1px solid #3b82f6;
+}
+
+.hp-box.p2 {
+  background: rgba(239, 68, 68, 0.2);
+  color: #f87171;
+  border: 1px solid #ef4444;
+}
+
+/* --- Board Area (Middle) --- */
+#board-container {
+  flex: 1;
+  position: relative;
+  background: #000;
+  overflow: hidden;
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  outline: none;
+  touch-action: none;
+  /* CRITICAL: Prevent scrolling on drag */
+}
+
+/* --- Log (Floating/Collapsible) --- */
+#log-toggle {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: rgba(30, 30, 30, 0.8);
+  color: #ccc;
+  border: 1px solid var(--border);
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  backdrop-filter: blur(4px);
+  z-index: 10;
+}
+
+#log-panel {
+  position: absolute;
+  top: 45px;
+  left: 10px;
+  right: 10px;
+  max-height: 40%;
+  background: rgba(30, 30, 30, 0.95);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px;
+  overflow-y: auto;
+  z-index: 20;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+#log-panel.hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-10px);
+}
+
+#log {
+  font-family: monospace;
+  font-size: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.log-entry {
+  color: #aaa;
+  border-bottom: 1px solid #333;
+  padding-bottom: 2px;
+}
+
+.log-entry:last-child {
+  border: none;
+  color: #fff;
+}
+
+
+/* --- Controls (Bottom) --- */
+#controls {
+  background: var(--panel-bg);
+  border-top: 1px solid var(--border);
+  padding: 12px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+#spells-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 8px;
+}
+
+/* Buttons */
+button {
+  background: #333;
+  color: #eee;
+  border: 1px solid #444;
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: all 0.1s active;
+}
+
+button:active {
+  transform: scale(0.98);
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Spell Buttons */
+.spell-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60px;
+  position: relative;
+  overflow: hidden;
+}
+
+.spell-btn.selected {
+  background: var(--warning);
+  border-color: #fbbf24;
+  color: #000;
+  box-shadow: 0 0 10px rgba(234, 179, 8, 0.4);
+}
+
+/* End Turn */
+#btn-end-turn {
+  background: var(--accent);
+  color: white;
+  border: none;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 16px;
+}
+
+#btn-end-turn:hover:not(:disabled) {
+  background: var(--accent-hover);
+}
+
+
+/* --- Desktop Layout (>= 900px) --- */
+@media (min-width: 900px) {
+  #app {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    grid-template-rows: 100%;
+    height: 100vh;
+  }
+
+  /* Move everything to Side Panel */
+  #hud {
+    grid-column: 2;
+    grid-row: 1;
+    flex-direction: column;
+    align-items: stretch;
+    /* Stretch children */
+    gap: 16px;
+    border-bottom: none;
+    padding-top: 24px;
+    height: auto;
+  }
+
+  #board-container {
+    grid-column: 1;
+    grid-row: 1 / -1;
+    border-right: 1px solid var(--border);
+  }
+
+  #controls {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: end;
+    /* Stick to bottom of sidebar column */
+    border-top: 1px solid var(--border);
+    padding-bottom: 24px;
+  }
+
+  #char-selects {
+    flex-direction: column;
+  }
+
+  /* Repurpose Log Panel for Desktop */
+  #log-toggle {
+    display: none;
+  }
+
+  #log-panel {
+    grid-column: 2;
+    grid-row: 1;
+    position: static;
+    /* In flow */
+    margin-top: 200px;
+    /* Space below Top HUD & Selectors */
+    margin-bottom: 250px;
+    /* Space above Controls */
+    max-height: calc(100vh - 480px);
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+    border: none;
+    background: transparent;
+    box-shadow: none;
+    display: flex;
+    flex-direction: column-reverse;
+    /* Newest at bottom visually */
+  }
+
+  #log-panel.hidden {
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+  }
+}
